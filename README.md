@@ -2,4 +2,4 @@
 
 Aqui posto os documentos do andamento do trabalho final da disciplina Sistemas Web I (11º semestre).
 
-1. [Proposta de trabalho](./Proposta1.png)
+1. [Proposta de trabalho](./Proposta1.md)
