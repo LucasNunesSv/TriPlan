@@ -57,3 +57,7 @@ Não fazem parte do escopo:
 * Integrações com APIs externas
 * Notificações, alertas ou lembretes automáticos
 * Suporte a diversas viagens
+
+
+
+PALETA NOVA 38b6ff
