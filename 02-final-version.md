@@ -232,7 +232,7 @@ npm install
 
 #### **Passo 4: Executar o Backend e Frontend em conjunto**
 
-Em um terminal, na pasta `backend`:
+Em um terminal, na pasta `backend` digite:
 
 ```bash
 npm run dev
@@ -243,7 +243,7 @@ O servidor backend iniciará na porta 3333 (padrão). Você verá a mensagem:
 Server running
 ```
 
-Em outro terminal (mantenha o backend rodando), na pasta `frontend`:
+Em outro terminal (mantenha o backend rodando), na pasta `frontend` digite:
 
 ```bash
 npm run dev
