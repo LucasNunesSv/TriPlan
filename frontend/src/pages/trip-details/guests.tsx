@@ -1,9 +1,7 @@
 import { CircleDashed, CircleCheck, UserCog } from "lucide-react";
-import Button from "../../components/button";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../../lib/axios";
-import GuestsManageModal from "./guests-manage-modal";
 
 interface Participant {
     id: string,
@@ -16,15 +14,6 @@ export default function Guests() {
 
     const [participants, setParticipants] = useState<Participant[]>([])
     const { tripId } = useParams()
-    const [isGuestsManageModalOpen, setIsGuestsManageModalOpen] = useState(false)
-
-    function openGuestsManageModal () {
-        setIsGuestsManageModalOpen(true)
-    }
-
-    function closeGuestsManageModal () {
-        setIsGuestsManageModalOpen(false)
-    }
 
     useEffect(() => {
         api.get(`/trips/${tripId}/participants`).then(response => setParticipants(response.data.participants))
@@ -51,18 +40,6 @@ export default function Guests() {
                     )
                 })}
             </div>
-
-            <Button onClick={openGuestsManageModal} variant="secondary" size="full">
-                <UserCog className='size-5 ' />
-                <span>Gerenciar convidados</span>
-            </Button>
-
-            {isGuestsManageModalOpen ? (
-                <GuestsManageModal 
-                    closeGuestsManageModalModal={closeGuestsManageModal}
-                />
-            ) : null}
-
         </div>
     )
 }

@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom"
 import { api } from "../../lib/axios"
 import { DateRange, DayPicker } from "react-day-picker"
 import { format } from "date-fns"
+import { ThreeDots } from "react-loader-spinner"
 
 interface UpdateLocalAndDateModalProps {
     closeUpdateLocalAndDateModal: () => void
@@ -16,32 +17,33 @@ export default function UpdateLocalAndDateModal({ closeUpdateLocalAndDateModal }
     const { tripId } = useParams()
 
     const [eventStartAndEndDate, setEventStartAndEndDate] = useState<DateRange | undefined>()
+    const [isLoading, setIsLoading] = useState(false);
     const displayedDate = eventStartAndEndDate && eventStartAndEndDate.from && eventStartAndEndDate.to ? `${format(eventStartAndEndDate.from, "d' de 'LLL")} a ${format(eventStartAndEndDate.to, "d")} de ${format(eventStartAndEndDate.to, "LLL")}` : null
 
     async function UpdateLocalAndDate(event: FormEvent<HTMLFormElement>) {
 
         event.preventDefault()
-
+        
         const data = new FormData(event.currentTarget)
-
+        
         const destination = data.get("destination")?.toString()
-
-
+        
         if (!destination) {
             return
         }
         if (!eventStartAndEndDate?.from || !eventStartAndEndDate?.to) {
             return
         }
-
+        
+        setIsLoading(true);
         await api.put(`/trips/${tripId}`, {
             destination: destination,
             starts_at: eventStartAndEndDate.from,
             ends_at: eventStartAndEndDate.to,
         })
+        setIsLoading(false);
 
         closeDatePicker()
-
         window.document.location.reload()
 
     }
@@ -96,15 +98,21 @@ export default function UpdateLocalAndDateModal({ closeUpdateLocalAndDateModal }
                                     </div>
                                 </div>
                                 <DayPicker selected={eventStartAndEndDate} onSelect={setEventStartAndEndDate} mode="range" classNames={{
-                                    today: `border-violet-500`, // Add a border to today's date
-                                    selected: `bg-violet-500 rounded-full border-violet-500 text-white`, // Highlight the selected day
+                                    today: `border-sky-400`,
+                                    selected: `bg-sky-400 rounded-full border-sky-400 text-white`,
                                 }} />
                             </div>
                         </div>
                     ) : null}
 
-                    <Button variant="primary" size="full">
-                        Atualizar viagem
+                    <Button variant="primary" size="full" type="submit">
+                        {isLoading ? (
+                            <div className="flex justify-center items-center gap-1">
+                                <ThreeDots color="#fff" height={34} width={34} />
+                            </div>
+                        ) : (
+                            "Atualizar viagem"
+                        )}
                     </Button>
 
                 </form>

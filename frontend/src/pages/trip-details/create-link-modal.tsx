@@ -1,9 +1,10 @@
 import { X, Link2, Pen } from "lucide-react"
 import Button from "../../components/button"
 import TextInput from "../../components/textInput"
-import { FormEvent } from "react"
+import { FormEvent, useState } from "react"
 import { useParams } from "react-router-dom"
 import { api } from "../../lib/axios"
+import { ThreeDots } from "react-loader-spinner"
 
 interface CreateLinkProps {
     closeCreateLinkModal: () => void
@@ -12,6 +13,8 @@ interface CreateLinkProps {
 export default function CreateLinkModal({ closeCreateLinkModal }: CreateLinkProps) {
 
     const {tripId} = useParams()
+
+    const [isLoading, setIsLoading] = useState(false);
 
     async function createLink (event: FormEvent<HTMLFormElement>) {
 
@@ -22,10 +25,12 @@ export default function CreateLinkModal({ closeCreateLinkModal }: CreateLinkProp
         const title = data.get("title")?.toString()
         const url = data.get("url")?.valueOf()
 
+        setIsLoading(true);
         await api.post(`/trips/${tripId}/links`, {
             title: title, 
             url: url
         })
+        setIsLoading(false);
 
         closeCreateLinkModal()
 
@@ -57,7 +62,13 @@ export default function CreateLinkModal({ closeCreateLinkModal }: CreateLinkProp
                     </TextInput>
 
                     <Button variant="primary" size="full">
-                        Salvar link
+                        {isLoading ? (
+                            <div className="flex justify-center items-center gap-1">
+                                <ThreeDots color="#fff" height={34} width={34} />
+                            </div>
+                        ) : (
+                            "Salvar link"
+                        )}
                     </Button>
 
                 </form>

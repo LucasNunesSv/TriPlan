@@ -1,9 +1,10 @@
 import { X, User, Calendar } from "lucide-react"
 import Button from "../../components/button"
 import TextInput from "../../components/textInput"
-import { FormEvent } from "react"
+import { FormEvent, useState } from "react"
 import { useParams } from "react-router-dom"
 import { api } from "../../lib/axios"
+import { ThreeDots } from "react-loader-spinner"
 
 interface CreateActivityModalProps {
     closeCreateActivityModal: () => void
@@ -12,6 +13,8 @@ interface CreateActivityModalProps {
 export default function CreateActivityModal({ closeCreateActivityModal }: CreateActivityModalProps) {
 
     const {tripId} = useParams()
+    
+    const [isLoading, setIsLoading] = useState(false);
 
     async function createActivity (event: FormEvent<HTMLFormElement>) {
 
@@ -22,13 +25,14 @@ export default function CreateActivityModal({ closeCreateActivityModal }: Create
         const activityName = data.get("activityName")?.toString()
         const occursAt = data.get("occurs_at")?.valueOf()
 
+        setIsLoading(true);
         await api.post(`/trips/${tripId}/activities`, {
             occurs_at: occursAt, 
             title: activityName
         })
+        setIsLoading(false);
 
         window.document.location.reload()
-
     }
 
     return (
@@ -45,7 +49,6 @@ export default function CreateActivityModal({ closeCreateActivityModal }: Create
                 </div>
 
                 <form onSubmit={createActivity} className='space-y-3'>
-
                     <TextInput type="text" name='activityName' placeholder="Qual a atividade?">
                         <User className='text-zinc-400 size-5' />
                     </TextInput>
@@ -54,10 +57,15 @@ export default function CreateActivityModal({ closeCreateActivityModal }: Create
                         <Calendar className='text-zinc-400 size-5' />
                     </TextInput>
 
-                    <Button variant="primary" size="full">
-                        Salvar atividade
+                    <Button variant="primary" size="full" type="submit">
+                        {isLoading ? (
+                            <div className="flex justify-center items-center gap-1">
+                                <ThreeDots color="#fff" height={34} width={34} />
+                            </div>
+                        ) : (
+                            "Salvar atividade"
+                        )}
                     </Button>
-
                 </form>
             </div>
         </div>
