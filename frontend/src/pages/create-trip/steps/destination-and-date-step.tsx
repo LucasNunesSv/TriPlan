@@ -58,10 +58,16 @@ export default function DestinationAndDateStep({ closeGuestsInput, isGuestsInput
                                 </button>
                             </div>
                         </div>
-                        <DayPicker selected={eventStartAndEndDate} onSelect={setEventStartAndEndDate} mode="range" classNames={{
-                            today: `border-sky-400`, // Add a border to today's date
-                            selected: `bg-sky-400 rounded-full border-sky-400 text-white`, // Highlight the selected day
-                        }} />
+                        <DayPicker 
+                            selected={eventStartAndEndDate} 
+                            onSelect={setEventStartAndEndDate} 
+                            mode="range" 
+                            disabled={{ before: new Date() }}
+                            classNames={{
+                                today: `border-sky-400`, // Add a border to today's date
+                                selected: `bg-sky-400 rounded-full border-sky-400 text-white`, // Highlight the selected day
+                            }} 
+                        />
                     </div>
                 </div>
             ) : null}

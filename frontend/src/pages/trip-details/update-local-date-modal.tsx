@@ -97,10 +97,16 @@ export default function UpdateLocalAndDateModal({ closeUpdateLocalAndDateModal }
                                         </button>
                                     </div>
                                 </div>
-                                <DayPicker selected={eventStartAndEndDate} onSelect={setEventStartAndEndDate} mode="range" classNames={{
-                                    today: `border-sky-400`,
-                                    selected: `bg-sky-400 rounded-full border-sky-400 text-white`,
-                                }} />
+                                <DayPicker 
+                                    selected={eventStartAndEndDate} 
+                                    onSelect={setEventStartAndEndDate} 
+                                    mode="range" 
+                                    disabled={{ before: new Date() }}
+                                    classNames={{
+                                        today: `border-sky-400`,
+                                        selected: `bg-sky-400 rounded-full border-sky-400 text-white`,
+                                    }} 
+                                />
                             </div>
                         </div>
                     ) : null}

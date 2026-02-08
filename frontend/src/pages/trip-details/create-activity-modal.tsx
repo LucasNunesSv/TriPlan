@@ -1,13 +1,22 @@
 import { X, User, Calendar } from "lucide-react"
 import Button from "../../components/button"
 import TextInput from "../../components/textInput"
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { api } from "../../lib/axios"
 import { ThreeDots } from "react-loader-spinner"
+import { format } from "date-fns"
 
 interface CreateActivityModalProps {
     closeCreateActivityModal: () => void
+}
+
+interface Trip {
+    id: string,
+    destination: string,
+    starts_at: string,
+    ends_at: string,
+    is_confirmed: boolean,
 }
 
 export default function CreateActivityModal({ closeCreateActivityModal }: CreateActivityModalProps) {
@@ -15,6 +24,14 @@ export default function CreateActivityModal({ closeCreateActivityModal }: Create
     const {tripId} = useParams()
     
     const [isLoading, setIsLoading] = useState(false);
+    const [trip, setTrip] = useState<Trip | undefined>();
+
+    useEffect(() => {
+        api.get(`/trips/${tripId}`).then(response => setTrip(response.data.trip))
+    }, [tripId])
+
+    const minDate = trip ? format(new Date(trip.starts_at), "yyyy-MM-dd'T'HH:mm") : undefined
+    const maxDate = trip ? format(new Date(trip.ends_at), "yyyy-MM-dd'T'HH:mm") : undefined
 
     async function createActivity (event: FormEvent<HTMLFormElement>) {
 
@@ -53,7 +70,13 @@ export default function CreateActivityModal({ closeCreateActivityModal }: Create
                         <User className='text-zinc-400 size-5' />
                     </TextInput>
 
-                    <TextInput type="datetime-local" name='occurs_at' placeholder="Data e horário da atividade">
+                    <TextInput 
+                        type="datetime-local" 
+                        name='occurs_at' 
+                        min={minDate} 
+                        max={maxDate}
+                        placeholder="Data e horário da atividade"
+                    >
                         <Calendar className='text-zinc-400 size-5' />
                     </TextInput>
 
